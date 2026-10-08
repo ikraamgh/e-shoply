@@ -1,0 +1,18 @@
+# Frontend
+shoply-frontend/node_modules/
+shoply-frontend/dist/
+shoply-frontend/.env
+
+# Backend
+shoply-backend/vendor/
+shoply-backend/.env
+shoply-backend/storage/logs/*.log
+shoply-backend/storage/framework/cache/
+shoply-backend/storage/framework/sessions/
+shoply-backend/storage/framework/views/
+shoply-backend/bootstrap/cache/
+shoply-backend/database/database.sqlite
+
+# OS
+.DS_Store
+Thumbs.db
