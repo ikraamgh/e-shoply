@@ -15,22 +15,26 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . .
 
+# Create required directories and fix permissions BEFORE composer install
+RUN mkdir -p /var/www/html/bootstrap/cache \
+    && mkdir -p /var/www/html/storage/framework/cache \
+    && mkdir -p /var/www/html/storage/framework/sessions \
+    && mkdir -p /var/www/html/storage/framework/views \
+    && mkdir -p /var/www/html/storage/logs \
+    && chmod -R 777 /var/www/html/storage \
+    && chmod -R 777 /var/www/html/bootstrap/cache
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Apache config — point to Laravel public/
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
     && a2enmod rewrite
 
-# Expose port
-EXPOSE 80
-
-# Start script
+# Copy and enable startup script
 COPY docker-start.sh /usr/local/bin/docker-start.sh
 RUN chmod +x /usr/local/bin/docker-start.sh
+
+EXPOSE 80
 
 CMD ["/usr/local/bin/docker-start.sh"]
