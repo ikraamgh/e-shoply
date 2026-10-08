@@ -1,0 +1,47 @@
+databases:
+  - name: shoply-db
+    databaseName: shoply
+    user: shoply_user
+    plan: free
+
+services:
+  - type: web
+    name: shoply-backend
+    runtime: php
+    plan: free
+    rootDir: shoply-backend
+    buildCommand: composer install --no-dev --optimize-autoloader
+    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
+    envVars:
+      - key: APP_NAME
+        value: Shoply
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: shoply-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: shoply-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: shoply-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: shoply-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: shoply-db
+          property: password
+      - key: FRONTEND_URL
+        value: https://your-frontend.vercel.app
