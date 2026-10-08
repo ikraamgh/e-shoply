@@ -44,4 +44,4 @@ services:
           name: shoply-db
           property: password
       - key: FRONTEND_URL
-        value: https://your-frontend.vercel.app
+        value: https://e-shoply.vercel.app
